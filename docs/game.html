@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="gameContainer"></div>
+
+<!-- POPUP MAINTENANCE -->
+<div id="maintenancePopup" class="maintenance-popup">
+  <div class="maintenance-box">
+    <h3>⚠ ระบบกำลังปรับปรุง</h3>
+    <p>กรุณากลับมาใหม่ภายหลัง</p>
+    <button onclick="closeMaintenance()">ปิด</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyB1MTh9KC8g9xwdEQ-XNbfGlC7qaOgLr6w",
+    authDomain: "idsa-4d2bc.firebaseapp.com",
+    projectId: "idsa-4d2bc"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// ดึง id จาก URL
+function getQueryParam(name) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(name);
+}
+
+const gameId = getQueryParam("id");
+
+loadGame(gameId);
+
+async function loadGame(gameId){
+  const docSnap = await db.collection("games").doc("main").get();
+  if(!docSnap.exists) return;
+
+  const data = docSnap.data();
+  const game = data[gameId];
+
+  if(!game){
+    document.getElementById("gameContainer").innerHTML = "<h3>ไม่พบสินค้า หรือ ถูกลบออกแล้ว</h3>";
+    return;
+  }
+
+  const isUpdating = game.updating === true;
+  const link = game.link || "#";
+
+  document.getElementById("gameContainer").innerHTML = `
+    <div class="game-card">
+      <img src="${game.image}" class="game-img">
+      <h2>${game.name}</h2>
+      <p>${game.price?.toLocaleString() || 0} LAK</p>
+      <button id="buyBtn" ${isUpdating ? "disabled" : ""}>
+        ${isUpdating ? "ระบบกำลังปรับปรุง" : "เติมเงิน"}
+      </button>
+    </div>
+  `;
+
+  const buyBtn = document.getElementById("buyBtn");
+
+  if(isUpdating){
+    // ปุ่มปิดใช้งาน + popup
+    buyBtn.onclick = ()=>{
+      document.getElementById("maintenancePopup").style.display = "flex";
+    }
+  } else {
+    // ถ้าอัปเดตแล้วไปตาม link ใน DB
+    buyBtn.onclick = ()=>{
+      window.location.href = link;
+    }
+  }
+}
+function closeMaintenance(){
+  document.getElementById("maintenancePopup").style.display = "none";
+}
+</script>
+
+</body>
+</html>
