@@ -110,6 +110,7 @@ body {
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 14px;
+   width: 70%;
 }
 .search-box button {
   padding: 8px 12px;
