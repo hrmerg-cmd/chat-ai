@@ -4,7 +4,7 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing: box-sizing;
 }
 body {
   font-family: 'Arial', sans-serif;
@@ -131,12 +131,59 @@ body {
   cursor: pointer;
 }
 
+#searchWrapper{
+  position:absolute;
+  top:60px;
+  right:20px;
+  width:350px;
+  background:white;
+  border-radius:10px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+  padding:10px;
+  display:none;
+  animation:slideDown .25s ease;
+}
+
+@keyframes slideDown{
+  from{
+    transform:translateY(-20px);
+    opacity:0;
+  }
+  to{
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+
+#searchResults{
+  max-height:300px;
+  overflow:auto;
+}
+
+.search-item{
+  display:flex;
+  gap:10px;
+  padding:8px;
+  cursor:pointer;
+}
+
+.search-item:hover{
+  background:#f5f5f5;
+}
+
+.search-item img{
+  width:40px;
+  height:40px;
+  object-fit:cover;
+  border-radius:5px;
+}
+
 /* ===============================
    CARD GRID (PRODUCTS)
 ================================= */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(100px, 0.5fr));
   gap: 20px;
   padding: 10px 0;
 }
@@ -234,6 +281,57 @@ body {
   background-color: #5900b3;
 }
 
+#loginBtn{
+  display: none;
+}
+
+#searchInput{
+  width: 120px;
+  padding: 5px 10px;
+  margin-left: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  transition: all 0.3s ease;
+}
+
+#searchIcon {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+#searchWrapper {
+  position: fixed;
+  top: 20px;
+  left: -100%; /* เริ่มซ่อนไว้ */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: left 0.3s ease;
+  z-index: 1000;
+}
+
+#searchWrapper.active {
+  left: 20px; /* เลื่อนออกมา */
+}
+
+#searchWrapper input {
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  border-radius: 4px;
+  width: 200px;
+  font-size: 16px;
+}
+
+#closeSearch {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
 /* ===============================
    SLIDER
 ================================= */
@@ -247,10 +345,12 @@ body {
    FOOTER
 ================================= */
 footer {
-  background-color: #111827;
+  background: #111827;
   color: #d1d5db;
-  padding: 50px 20px 20px;
+  padding: 50px 20px 90px; /* เพิ่ม padding ล่าง */
+  margin-bottom: 65px; /* กัน navbar ทับ */
 }
+
 footer a {
   text-decoration: none;
   color: #d1d5db;
@@ -268,9 +368,9 @@ footer .footer-bottom {
 /* ===============================
    RESPONSIVE
 ================================= */
-@media(max-width: 768px){
+@media(max-width: 769px){
   .navbar-custom .nav-title {
-    display: none; /* hide site name */
+    display: inline-block; /* hide site name */
   }
   .nav-barlink a .link-text {
     display: none; /* hide text */
@@ -285,9 +385,62 @@ footer .footer-bottom {
     flex-direction: column;
     align-items: center;
   }
+  
+  .carousel-item{
+    height: 200px;
+  }
+  .carousel-item img{
+    width: 100%;
+    height: 180px;
+  }
+
+#searchIcon {
+  font-size: 24px;
+  cursor: pointer;
+  margin-left: 110px;
+  text-align: right;
+}
 }
 @media(min-width:769px){
   .nav-barlink a i, .nav-contacts a i {
     display: none; /* hide icons on PC */
   }
+  
+  .card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 0.35fr));
+  gap: 20px;
+  padding: 10px 0;
+}
+
+.navbar-custom .nav-title {
+    display: inline-block; /* hide site name */
   }
+
+.navbar-toggler{
+  margin-right: 80px;
+}
+
+#searchIcon {
+  font-size: 24px;
+  cursor: pointer;
+  margin-left: 880px;
+  text-align: right;
+}
+
+#searchWrapper {
+  position: fixed;
+  top: 12px;
+  left: -80%; /* เริ่มซ่อนไว้ */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 800px;
+  background: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: left 0.3s ease;
+  z-index: 1000;
+}
+}
